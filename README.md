@@ -18,3 +18,6 @@ seismoai/
 ├── seismoai_qc/       # Quality control (noise & bad trace detection)
 ├── seismoai_model/    # Machine learning model
 ├── seismoai_xai/      # Explainable AI (SHAP analysis)
+
+
+Author Muhammad Armaghan 
