@@ -1,0 +1,20 @@
+# --- Python Environment ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# --- Data (CRITICAL) ---
+# This ignores the large .sgy files mentioned in the project [cite: 7, 8]
+data/*.sgy
+data/
+
+# --- Build & Distribution ---
+# Ignores the files created when you prepare for PyPI [cite: 42]
+dist/
+build/
+*.egg-info/
+
+# --- VS Code & Local ---
+.vscode/
+.DS_Store
