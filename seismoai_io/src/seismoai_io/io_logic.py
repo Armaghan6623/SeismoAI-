@@ -4,28 +4,28 @@ import os
 
 def load_single_sgy(file_path):
     """
-    Loads a single .sgy file and extracts traces as a NumPy array.
-    Expected shape: (167, 4001). [cite: 8, 12]
+    Loads a single .sgy file and returns traces as a numpy array.
+    Expects (167, 4001) based on Forge 2D Survey specs.
     """
-    with segyio.open(file_path, ignore_geometry=True) as f:
-        traces = segyio.tools.collect(f.trace[:])
+    with segyio.open(file_path, ignore_geometry=True, strict=False) as f:
+        # Using collect is often faster for segyio
+        traces = segyio.tools.collect(f.trace[:]) 
     return traces
 
 def load_folder(folder_path):
     """
-    Scans a directory for all .sgy files and returns a list of loaded traces. [cite: 24]
+    Scans a directory for .sgy files and loads them into a list of arrays.
     """
-    datasets = []
-    for filename in os.listdir(folder_path):
-        if filename.endswith(".sgy"):
-            full_path = os.path.join(folder_path, filename)
-            datasets.append(load_single_sgy(full_path))
-    return datasets
+    all_data = []
+    for file in os.listdir(folder_path):
+        if file.endswith(".sgy"):
+            full_path = os.path.join(folder_path, file)
+            all_data.append(load_single_sgy(full_path))
+    return all_data
 
 def normalize_traces(traces):
     """
-    Scales trace amplitudes to a range of [-1, 1]. [cite: 24]
-    Helps handle high-amplitude noise (e.g., 758 spikes). [cite: 31]
+    Scales amplitudes to [-1, 1] to handle outliers (like 758 vs +/- 10).
     """
     max_amp = np.max(np.abs(traces))
     if max_amp == 0:

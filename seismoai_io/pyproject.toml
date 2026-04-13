@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seismoai-io"
+version = "0.1.0"
+description = "IO module for seismic data processing"
+readme = "README.md"
+authors = [{ name = "Your Name", email = "your.email@example.com" }]
+dependencies = [
+    "segyio",
+    "numpy",
+    "pandas", # Recommended for header handling [cite: 11]
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
