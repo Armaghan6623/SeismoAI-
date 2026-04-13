@@ -28,12 +28,20 @@ def plot_trace(traces, trace_index=80):
     plt.grid(True)
     plt.show()
 
-def show_spectrum(trace):
+def show_spectrum(trace, dt=0.001): # dt = 1ms 
     """
-    Calculates and plots the frequency content (FFT) of a trace.
+    Calculates and plots the frequency content (FFT) of a trace in Hz.
     """
     fft_vals = np.abs(np.fft.rfft(trace))
-    freqs = np.fft.rfftfreq(len(trace))
+    freqs = np.fft.rfftfreq(len(trace), d=dt) # Use real-world sample interval
+    
+    plt.figure(figsize=(10, 4))
+    plt.plot(freqs, fft_vals)
+    plt.title("Frequency Spectrum (Hz)")
+    plt.xlabel("Frequency (Hz)")
+    plt.ylabel("Magnitude")
+    plt.xlim(0, 150) # Most seismic data is in the 0-150Hz range
+    plt.show()
     
     plt.figure(figsize=(10, 4))
     plt.plot(freqs, fft_vals)
