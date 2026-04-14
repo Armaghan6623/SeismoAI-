@@ -1,12 +1,28 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "seismoai-viz"
+name = "seismoai-viz-elegant-solutions"
 version = "0.1.0"
-description = "Visualization module for seismic data"
+description = "Visualization helpers for seismic trace data."
+readme = "README.md"
+requires-python = ">=3.9"
 dependencies = [
     "matplotlib",
     "numpy",
 ]
+
+[project.optional-dependencies]
+# Install with: pip install seismoai-viz-elegant-solutions[io]
+io = [
+    "seismoai-io-elegant-solutions>=0.1.0",
+]
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

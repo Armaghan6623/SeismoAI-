@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seismoai-workspace"
+version = "0.0.0"
+description = "Monorepo root marker. Real packages live in seismoai_io/ and seismoai_viz/ — install those with pip install -e."
+readme = "README.md"
+requires-python = ">=3.9"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["seismoai_workspace*"]

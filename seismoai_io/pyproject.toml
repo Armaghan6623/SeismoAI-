@@ -1,18 +1,24 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "seismoai-io"
 version = "0.1.0"
-description = "IO module for seismic data processing"
+description = "Utilities for loading and normalizing seismic SEG-Y files."
 readme = "README.md"
-authors = [{ name = "Your Name", email = "your.email@example.com" }]
+requires-python = ">=3.9"
 dependencies = [
     "segyio",
     "numpy",
-    "pandas", # Recommended for header handling [cite: 11]
+    "pandas",
 ]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

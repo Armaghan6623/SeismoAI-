@@ -1,74 +1,128 @@
-# SeismoAI-
+# SeismoAI
 
-SeismoAI – Seismic Data Processing Pipeline
-📌 Overview
+Modular Python packages for loading, visualizing, quality-checking, modeling, and explaining decisions on real **SEG-Y** seismic data (Forge 2D Survey, 2017). Each module is a separate installable package; together they form an end-to-end pipeline.
 
-SeismoAI is a modular Python-based project designed to process, analyze, and interpret seismic data using machine learning. The system is built as a collaborative pipeline where each module performs a specific task, contributing to a complete AI-driven seismic analysis workflow.
+## Requirements
 
-This project works with real SEG-Y (.sgy) seismic data and covers everything from data loading to explainable AI.
+- **Python** 3.9 or newer  
+- **Dataset**: `.sgy` files placed under `data/` (not committed if large; see `.gitignore`)
 
-🧠 Project Structure
+## Repository layout
 
-The system is divided into 5 independent but connected modules:
+| Path | Role |
+|------|------|
+| `data/` | Local `.sgy` files for development and demos |
+| `seismoai_io/` | Load and normalize SEG-Y traces |
+| `seismoai_viz/` | Plot gathers, traces, and spectra |
+| `seismoai_qc/` | QC labels and reports *(if present)* |
+| `seismoai_model/` | Training and prediction *(if present)* |
+| `seismoai_xai/` | Explainability *(if present)* |
 
-seismoai/
-│
-├── seismoai_io/       # Load and preprocess SGY files
-├── seismoai_viz/      # Visualization of seismic data
-├── seismoai_qc/       # Quality control (noise & bad trace detection)
-├── seismoai_model/    # Machine learning model
-├── seismoai_xai/      # Explainable AI (SHAP analysis)
+## Install (local development)
 
+The **usable** packages are **`seismoai_io`** and **`seismoai_viz`**. Install each from its own folder (below).
 
-Blue Print Of src Layout 
+You *can* run `python -m pip install -e .` at the **repository root**; that only installs a tiny placeholder package (`seismoai-workspace`) so pip stops erroring. It does **not** install `seismoai_io` or `seismoai_viz`. You still need:
 
-SeismoAI_Project/
-├── .gitignore               # Keeps large .sgy files and venv off GitHub
-├── README.md                # Project overview and author details 
-├── data/                    # Store your Forge 2D Survey .sgy files here [cite: 7]
-│   └── forge_2d_survey.sgy
-│
-├── seismoai_io/             # MODULE 1: Data Loading [cite: 23, 24]
-│   ├── pyproject.toml       # Makes it pip-installable 
-│   ├── src/
-│   │   └── seismoai_io/
-│   │       ├── __init__.py
-│   │       └── io_logic.py  # load_single_sgy, load_folder, normalize
-│   └── tests/
-│       └── test_io.py       # Pass/fail verification 
-│
-├── seismoai_viz/            # MODULE 2: Visualization [cite: 26, 27]
-│   ├── pyproject.toml
-│   ├── src/
-│   │   └── seismoai_viz/
-│   │       ├── __init__.py
-│   │       └── viz_logic.py # plot_gather, plot_trace, show_spectrum
-│   └── tests/
-│       └── test_viz.py
-│
-├── seismoai_qc/             # MODULE 3: Quality Control [cite: 29, 30]
-│   ├── pyproject.toml
-│   ├── src/
-│   │   └── seismoai_qc/
-│   │       ├── __init__.py
-│   │       └── qc_logic.py  # detect_dead, detect_noisy, qc_report
-│   └── tests/
-│       └── test_qc.py
-│
-├── seismoai_model/          # MODULE 4: AI Model [cite: 34, 35]
-│   ├── pyproject.toml
-│   ├── src/
-│   │   └── seismoai_model/
-│   │       ├── __init__.py
-│   │       └── model_logic.py # extract_features, train, predict
-│   └── tests/
-│       └── test_model.py
-│
-└── seismoai_xai/            # MODULE 5: Explainable AI [cite: 37, 38]
-    ├── pyproject.toml
-    ├── src/
-    │   └── seismoai_xai/
-    │       ├── __init__.py
-    │       └── xai_logic.py   # compute_shap, plot_importance
-    └── tests/
-        └── test_xai.py
+```powershell
+python -m pip install -e .\seismoai_io
+python -m pip install -e .\seismoai_viz
+```
+
+(Use quotes around paths if needed.)
+
+**Module 1 — I/O**
+
+```powershell
+cd "path\to\SeismoAI_Project\seismoai_io"
+python -m pip install -e .
+```
+
+**Module 2 — visualization** (optional: pull in I/O from PyPI once published)
+
+```powershell
+cd "path\to\SeismoAI_Project\seismoai_viz"
+python -m pip install -e .
+# Optional extra after both packages are on PyPI:
+# python -m pip install -e ".[io]"
+```
+
+## Install from PyPI (after publishing)
+
+Replace with your published names when available:
+
+```bash
+pip install seismoai-io
+pip install seismoai-viz
+```
+
+## Quick start
+
+**Load and inspect one file** (adjust filename to match your `data/` folder):
+
+```python
+from seismoai_io.io_logic import load_single_sgy, normalize_traces
+
+traces, headers = load_single_sgy("data/your_file.sgy")
+traces = normalize_traces(traces)
+print(traces.shape, headers.shape)
+```
+
+**Plot** (requires `seismoai-viz` installed):
+
+```python
+from seismoai_viz.viz_logic import plot_gather, plot_trace, show_spectrum
+
+plot_gather(traces)
+plot_trace(traces, trace_index=0)
+show_spectrum(traces[0], dt=0.001)
+```
+
+A small script `check_data.py` at the repo root can be used to verify loading for a fixed filename.
+
+## Tests
+
+Install **pytest** if needed: `python -m pip install pytest`
+
+**From the repository root** (recommended — uses `pytest.ini`):
+
+```powershell
+cd "path\to\SeismoAI_Project"
+python -m pytest
+```
+
+**Per package** (optional):
+
+```powershell
+cd seismoai_io
+python -m pytest
+
+cd ..\seismoai_viz
+python -m pytest
+```
+
+If you accidentally copied visualization tests into `seismoai_io\test_viz.py`, remove that file so only `seismoai_viz\tests\` contains viz tests.
+
+## Module API summary
+
+### `seismoai-io`
+
+- `load_single_sgy(path)` — traces array and header table  
+- `load_folder(path)` — dict of filename → `(traces, headers)`  
+- `normalize_traces(traces)` — scale amplitudes to approximately `[-1, 1]`
+
+### `seismoai-viz`
+
+- `plot_gather(traces, title=..., show=True)` — 2D gather image  
+- `plot_trace(traces, trace_index=..., show=True)` — single trace waveform  
+- `show_spectrum(trace, dt=0.001, show=True)` — magnitude spectrum  
+
+Use `show=False` for headless or automated runs.
+
+## Authors
+
+<!-- Add both student names and GitHub handles before submission. -->
+
+## License
+
+<!-- Add if your course requires one. -->
