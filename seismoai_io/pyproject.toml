@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "seismoai-io"
+name = "seismoai-io-mani"
 version = "0.1.0"
-description = "Utilities for loading and normalizing seismic SEG-Y files."
+description = "Seismic data IO toolkit for SeismoAI"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
